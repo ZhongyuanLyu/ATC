@@ -5,8 +5,8 @@
 - Zhongyuan Lyu
 - Kaizheng Wang
 
-### Date:
-- Oct 29, 2024
+### Paper:
+- Available on [arXiv: https://arxiv.org/pdf/2410.21263](https://arxiv.org/pdf/2410.21263)
 
 ### Contents:
 - **Simulations**: Contains all necessary code to reproduce the results of the simulation studies. Specifically, `algo_new.py` includes functions to run the Adaptive Transfer Clustering (ATC) algorithm.
