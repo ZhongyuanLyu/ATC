@@ -73,8 +73,6 @@ plt.ylabel('Clustering Error', fontsize=22)
 # plt.savefig('Business_lambda.png', bbox_inches='tight')
 
 
-# In[ ]:
-
 
 
 

@@ -493,7 +493,7 @@ def TL_demo(X0, X1, Z, K, dist, list_lbd, show = False, **kwargs):
         try:
             err_lbd = Hamming_aligned(Z, list_Z_hat[j])
         except:
-            print(Z,list_Z_hat[j])
+            print(len(Z),len(list_Z_hat[j]))
         AMI_lbd = adjusted_mutual_info_score(Z, list_Z_hat[j])
         errs.append(err_lbd)
         AMIs.append(AMI_lbd)
@@ -746,7 +746,7 @@ def one_sim(K, n, dist, mean, covariances, epsilon, B_bootstrap, list_q):
     return err_mat
 
 
-def ATC_err_lbd(K, n, dist, pars, epsilon, B_bootstrap, list_q, list_lbd, **kwargs):
+def ATC_err_lbd(K, n, dist, pars, epsilon, B_bootstrap, list_q, list_lbd = 0.2 * np.arange(20), **kwargs):
     if dist==['Gaussian', 'Gaussian']:
         [X0, X1, Z0, Z1, parGMM] = generate_GMM_samples(K,n, pars['mean'], pars['covariances'], epsilon)
     elif dist==['Network','Gaussian']:
@@ -775,4 +775,40 @@ def ATC_err_lbd(K, n, dist, pars, epsilon, B_bootstrap, list_q, list_lbd, **kwar
     err_vec *= 1/n
 
     return err_vec
+
+
+
+def ATC_err_lbd_plug_in(K, n, dist, pars, epsilon, B_bootstrap, list_q, list_lbd = 0.2 * np.arange(20), **kwargs):
+    [X0, X1, Z0, Z1, parGMM] = generate_GMM_samples(K,n, pars['mean'], pars['covariances'], epsilon)
+    
+    tmp0 = fit_GMM(X0, K = K)
+    tmp1 = fit_GMM(X1, K = K)
+    eps_hat = Hamming_aligned(tmp0['labels'], tmp1['labels'])/n
+    lam_hat = np.log(1/eps_hat)
+    [_, errs_plug_in, _] = TL_demo(X0, X1, Z0, K, dist, [lam_hat])
+
+
+    
+    # performance of all candidates
+    [paras_hat, errs, AMIs] = TL_demo(X0, X1, Z0, K, dist, list_lbd, **kwargs)
+       
+    # adaptive clustering
+    start = time.time()
+    [errs_hat,_,_] = estimate_error(X0, X1, K = K, dist = dist, list_lbd = list_lbd, B_bootstrap = B_bootstrap, list_q = list_q, seed = 1000,  **kwargs)
+    duration = time.time() - start
+    err_vec = np.zeros(len(list_q)+3)
+    
+    err_vec[-3] = errs[0] ## ITL
+    err_vec[-2] = errs[-1] ## DP
+    err_vec[-1] = errs_plug_in[0] ## Plug-in estimator
+    
+    list_selected_idx = np.argmin(errs_hat, axis = 1)
+    # print(list_selected_idx, errs_hat)
+    for (i, q) in enumerate(list_q):
+        err_vec[i] = errs[list_selected_idx[i]]
+    err_vec *= 1/n
+
+    return err_vec
+
+
 

@@ -198,36 +198,6 @@ plt.show()
 
 
 
-err = np.loadtxt("err_gmm_mu_eps0.2.txt")
-signal = np.arange(0.1, 0.4, 0.02)
-# Plotting the data
-plt.figure(figsize=(10, 6))
-
-# Define labels for methods
-labels = ['Method 0.8', 'Method 0.9', 'Method 0.95', 'Independent Task Learning', 'Data Pooling']
-# labels = ['Method 0.9', 'Independent Task Learning', 'Data Pooling']
-
-# Plot each method with different colors
-# colors = ['b', 'g', 'r']
-colors = ['b', 'g', 'r', 'c', 'm']
-markers = ['o', 'o', 'o', 's', '*']
-for i in range(err.shape[1]):
-    plt.plot(signal, err[:, i], label=labels[i], color=colors[i], marker=markers[i])
-
-
-# Adding titles and labels
-plt.title('Clustering Error vs Signal Strength')
-plt.xlabel('Signal Strength $r$')
-plt.ylabel('Clustering Error')
-
-# Adding legend
-plt.legend()
-
-# Show plot
-plt.grid(True)
-plt.show()
-
-
 
 
 
