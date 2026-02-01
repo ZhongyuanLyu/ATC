@@ -11,7 +11,9 @@ from algo_new import *
 import warnings
 
 
-
+###############################################################################################
+###### This file generates data for Figure 8, 7R, 6R, 7L, 6L in the ATC paper #################
+###############################################################################################
 
 ###############################
 ### Bernoulli-Bernoulli model ##
@@ -181,7 +183,7 @@ for i in range(nsim):
 
 err = err_eps.mean(axis = 2)
 print(err)
-# np.savetxt('err_csbm_targetgmm_eps_mu0.2_new.txt', err, fmt='%f')
+# np.savetxt('err_csbm_targetgmm_eps_mu0.23_new.txt', err, fmt='%f')
 
 
 
@@ -219,43 +221,4 @@ for i in range(nsim):
 err = err_eps.mean(axis = 2)
 print(err)
 # np.savetxt('err_gmm_eps_mu0.2_new.txt', err, fmt='%f')
-
-
-
-###############################
-### Gaussian Mixture Model ####
-###############################
-
-######################## Err v.s. epsilon ################################
-
-# parameters for generating models
-dist = ['Gaussian','Gaussian']
-d = 10   # dimension 
-K = 2   # number of clusters
-n = 500  # number of samples
-epsilon = 0.2 # similarity control
-covariances = np.identity(d)
-
-# parameters for bootstrap 
-B_bootstrap = 500
-list_q = [0.8, 0.9, 0.95]
-seed = 1000
-
-# parameters for simulation
-nsim = 50
-signal = np.arange(0.1, 0.4, 0.02)
-tmp = np.random.normal(0, 3, size=d)
-tmp /= np.linalg.norm(tmp)
-mean_mat = np.outer(signal*np.log(n), tmp)
-err_signal = np.zeros([len(signal), len(list_q)+2, nsim])
-# start simulations
-for i in range(nsim):
-    print('simulation iteration = {}\n'.format(i+1))
-    for j in range(len(signal)):
-        err_signal[j, :, i] = one_sim(K, n, dist, mean_mat[j,:], covariances, epsilon, B_bootstrap, list_q)
-
-err = err_signal.mean(axis = 2)
-# np.savetxt('err_gmm_mu_eps0.2.txt', err, fmt='%f')
-
-
 

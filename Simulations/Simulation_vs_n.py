@@ -12,8 +12,9 @@ from algo_new import *
 from realdata import *
 import warnings
 
-
-# In[6]:
+###############################################################################################
+###### This file generates data for Figure 10R 11R 11L 9L/10L 9R in the ATC paper #############
+###############################################################################################
 
 
 ###############################
@@ -134,8 +135,6 @@ err = err_eps.mean(axis = 2)
 np.savetxt('err_bgm_eps_mu0.25_n_varying.txt', err, fmt='%f')
 
 
-# In[38]:
-
 
 ###############################
 ### Contextual SBM model  ####
@@ -171,13 +170,6 @@ err = err_eps.mean(axis = 2)
 np.savetxt('err_csbm_eps_mu0.25_n_varying.txt', err, fmt='%f')
 
 
-# In[39]:
-
-
-err_eps
-
-
-# In[8]:
 
 
 ###############################
@@ -214,3 +206,37 @@ err = err_eps.mean(axis = 2)
 np.savetxt('err_gmm_eps_mu0.2_n_varying.txt', err, fmt='%f')
 
 
+
+
+###############################
+### Gaussian Mixture Model ####
+###############################
+
+######################## Err v.s. n ################################
+
+# parameters for generating models
+dist = ['Gaussian','Gaussian']
+d = 10   # dimension 
+K = 2   # number of clusters
+tmp = np.random.normal(0, 1, size=d)
+
+# parameters for bootstrap 
+B_bootstrap = 1000
+list_q = [0.8, 0.9, 0.95]
+seed = 1000
+
+# parameters for simulation
+nsim = 50
+n_list = np.arange(400, 850, 50) # similarity control
+epsilon = 0
+err_eps = np.zeros([len(n_list), len(list_q)+2, nsim])
+# start simulations
+for i in range(nsim):
+    print('simulation iteration = {}\n'.format(i+1))
+    for j in range(len(err_eps)):
+        mean = 0.2*np.log(n_list[j])*tmp/np.linalg.norm(tmp)
+        pars = {'mean': mean, 'covariances': np.identity(d)}
+        err_eps[j, :, i] = ATC_err_lbd(K, n_list[j], dist, pars, epsilon, B_bootstrap, list_q, list_lbd = 0.3 * np.arange(20))
+
+err = err_eps.mean(axis = 2)
+np.savetxt('err_gmm_eps_mu0_n_varying.txt', err, fmt='%f')
