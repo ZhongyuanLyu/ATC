@@ -64,7 +64,7 @@ Mullis, I.V.S., Martin, M.O., Foy, P., Kelly, D.L., & Fishbein, B. (2020).
 *TIMSS 2019 International Results in Mathematics and Science*. Boston College, TIMSS & PIRLS International Study Center.
 
 #### Business Relation Network (BRN)
-- `BRN.json`: business relation network data (renamed from `Data.json` for clarity).
+- `BRN.json`: business relation network data.
 
 Reference:
 Xu, S., Zhen, Y., & Wang, J. (2023). *Covariate-assisted community detection in multi-layer networks*.
