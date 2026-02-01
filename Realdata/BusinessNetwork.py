@@ -22,7 +22,7 @@ from sparsebm import generate_SBM_dataset
 
 
 # Read data
-with open('Data.json', 'r') as file:
+with open('BRN.json', 'r') as file:
     text = file.read()
 dict_1 = json.loads(text)
 A = np.array(dict_1.get('network'))

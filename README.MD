@@ -24,6 +24,7 @@ Code to reproduce simulation figures in the paper.
 ### Realdata/
 Code to reproduce real-data experiments.
 
+
 #### Lazega Lawyers Network
 - `LawyersNetwork_preprocess.py`: preprocessing for the Lazega Lawyers dataset.
 - `LawyersNetwork.py`: main script / demo for ATC on Lazega Lawyers.
@@ -63,30 +64,14 @@ Mullis, I.V.S., Martin, M.O., Foy, P., Kelly, D.L., & Fishbein, B. (2020).
 *TIMSS 2019 International Results in Mathematics and Science*. Boston College, TIMSS & PIRLS International Study Center.
 
 #### Business Relation Network (BRN)
-- `BRN.json`: business relation network data.
+- `BRN.json`: business relation network data (renamed from `Data.json` for clarity).
 
 Reference:
 Xu, S., Zhen, Y., & Wang, J. (2023). *Covariate-assisted community detection in multi-layer networks*.
 *Journal of Business & Economic Statistics*, 41(3), 915–926.
 
----
-
-## File formats
-This repository/workflow involves multiple file types depending on the dataset:
-- `.csv` (processed outputs)
-- `.json` (BRN data)
-- `.sav` (TIMSS SPSS data after download)
-- `.dat`, `.xlsx` (auxiliary inputs used in preprocessing as applicable)
-
----
-
-## Python dependencies (versions)
-External libraries used (as listed in the ACC form):
-- pandas 2.2.2
-- numpy 1.26.4
-- pyreadstat 1.2.7
-- matplotlib 3.8.4
-- sparsebm 1.6.7
-- sklearn 1.4.2
-- scipy 1.31.1
-- stepmix 2.2.1
+### R scripts (real-data comparisons)
+In addition to the Python pipeline, we provide optional R scripts to reproduce the real-data comparison summaries:
+- `Laywer.R`: Lazega Lawyers Network real-data comparison (R implementation/metrics).
+- `Business.R`: Business Relation Network (BRN) real-data comparison (R implementation/metrics).
+- `Useful_functions.R`: helper functions shared by the two R scripts.

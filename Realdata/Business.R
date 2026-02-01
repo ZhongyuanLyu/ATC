@@ -1,0 +1,34 @@
+library(NAC)
+library(kernlab)
+library(aricode)
+set.seed(123)
+source("Useful_functions.R")
+adjMat <- as.matrix(read.csv("BRNData/adjMat.csv", header = FALSE))
+covMat <- as.matrix(read.csv("BRNData/covMat.csv", header = FALSE))
+labels <- read.csv("BRNData/label.csv", header = TRUE)$label+1
+adjMat <- unname(adjMat)
+result <- CAclustering(adjMat, covMat, K = 5)
+
+
+CASC_res <- CAclustering(adjMat, covMat, K = 5)
+NAC_res <- NAC(adjMat, covMat, K = 5)
+kernelMat <- kernelMatrix(rbfdot(sigma = 1/(2*compute_bandwidth(covMat))), x = covMat, y = NULL)
+lam_list <- seq(0,5, length.out = 20)
+eigen_list <- eigen_gap_g(adjMat, kernelMat, lam_list, r = 5)
+SDP_res <- SDP(adjMat, kernelMat, lambda = lam_list[which.max(eigen_list)], K = 5, alpha = 1e6, 
+               rho = 0.25 , TT = 100, tol = 5)
+
+
+effective_hamming_error(labels, SDP_res)
+effective_hamming_error(labels, CASC_res)
+effective_hamming_error(labels, NAC_res)
+
+ARI(labels, SDP_res)
+ARI(labels, CASC_res)
+ARI(labels, NAC_res)
+
+### use package casc ###
+# source("casc.R")
+# result <- casc(adjMat, covMat, nBlocks = 5)
+# print(result$cluster)
+# effective_hamming_error(labels, result)
